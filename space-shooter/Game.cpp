@@ -111,21 +111,21 @@ void Game::updateBullets() {
 }
 
 void Game::updateAsteroids() {
-	for (int i = static_cast<int>(this->asteroids.size()) - 1; i >= 0; --i) {
-		this->asteroids[i]->update();
+	for (int i = static_cast<int>(this->enemies.size()) - 1; i >= 0; --i) {
+		this->enemies[i]->update();
 
-		// Asteroid culling (bottom of screen)
-		if (this->asteroids[i]->getBounds().top + this->asteroids[i]->getBounds().height > this->window->getSize().y) {
-			delete this->asteroids[i];
-			this->asteroids.erase(this->asteroids.begin() + i);
+		// Asteroid culling (bottom of screen or destroyed)
+		if (this->enemies[i]->getBounds().top + this->enemies[i]->getBounds().height > this->window->getSize().y or this->enemies[i]->getHealth() <= 0) {
+			delete this->enemies[i];
+			this->enemies.erase(this->enemies.begin() + i);
 		}
-		std::cout << this->asteroids.size() << "\n";
 	}
+	std::cout << this->enemies.size() << "\n";
 }
 
 void Game::spawnEnemies() {
 	if (this->spawning >= this->spawnRate) {
-		this->asteroids.push_back(new Asteroid(this->textures["ASTEROID"], this->window->getSize()));
+		this->enemies.push_back(new Asteroid(this->textures["ASTEROID"], this->window->getSize()));
 		this->spawning = 0;
 	}
 	else
@@ -151,8 +151,8 @@ void Game::render() {
 	for (auto* bullet : this->bullets)
 		bullet->render(this->window);
 
-	for (auto* asteroid : this->asteroids)
-		asteroid->render(*this->window);
+	for (auto* enemy : this->enemies)
+		enemy->render(*this->window);
 
 	this->window->display();
 }

@@ -69,23 +69,7 @@ Asteroid::~Asteroid() {
 
 }
 
-void Asteroid::getHit(float damage) {
-	this->health -= damage;
-}
-
-bool Asteroid::Destroyed() {
-	if (this->health <= 0) return true; else return false;
-}
-
-const sf::FloatRect Asteroid::getBounds() const {
-	return this->sprite.getGlobalBounds();
-}
-
 void Asteroid::update() {
 	this->sprite.rotate(this->rotationAngle * rotationSpeed);
 	this->sprite.move(this->velocity.x, this->velocity.y);
-}
-
-void Asteroid::render(sf::RenderTarget& target) {
-	target.draw(this->sprite);
 }

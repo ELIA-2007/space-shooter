@@ -16,7 +16,7 @@ private:
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
 	std::vector<Bullet*> bullets;
-	std::vector<Asteroid*> asteroids;
+	std::vector<Enemy*> enemies;
 	unsigned int spawnRate = 1000;
 	unsigned int spawning = spawnRate;
 
