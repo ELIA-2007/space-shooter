@@ -11,11 +11,13 @@ protected:
 
 	float moveSpeed;
 	float health;
+	float damage;
 
 private:
 
 public:
 	virtual float getHealth();
+	virtual float getDamage();
 	virtual void getHit(float damage);
 	virtual const sf::FloatRect getBounds() const;
 

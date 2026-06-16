@@ -114,6 +114,17 @@ void Game::updateBullets() {
 		if (this->bullets[i]->getBounds().top + this->bullets[i]->getBounds().height < 0.f) {
 			delete this->bullets[i];
 			this->bullets.erase(this->bullets.begin() + i);
+			continue;
+		}
+
+		//Check collisions
+		for (int j = static_cast<int>(this->enemies.size()) - 1; j >= 0; --j) {
+			if (this->bullets[i]->getBounds().intersects(this->enemies[j]->getBounds())) {
+				delete this->bullets[i];
+				this->bullets.erase(this->bullets.begin() + i);
+				this->enemies[j]->getHit(this->player->getDamage());
+				break;
+			}
 		}
 	}
 }
@@ -144,6 +155,20 @@ void Game::update() {
 	this->updatePollEvents();
 	this->updateInput();
 	this->player->update();
+
+	for (int i = static_cast<int>(this->enemies.size()) - 1; i >= 0; --i) {
+		if (this->player->getBounds().intersects(this->enemies[i]->getBounds())) {
+			this->player->getHit(this->enemies[i]->getDamage());
+			delete this->enemies[i];
+			this->enemies.erase(this->enemies.begin() + i);
+		}
+	}
+	if (this->player->getHealth() <= 0) {
+		this->window->close();
+	}
+
+	std::cout << "Health: " << this->player->getHealth() << "\n";
+
 	this->updateBullets();
 	this->updateAsteroids();
 	this->spawnEnemies();

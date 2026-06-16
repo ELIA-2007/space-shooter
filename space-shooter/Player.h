@@ -11,7 +11,9 @@ private:
 	sf::Texture texture;
 	sf::Sprite sprite;
 
+	float health;
 	float moveSpeed;
+	float damage;
 	int unsigned shootingCooldown;
 	int unsigned shootingCooldownMax;
 
@@ -26,13 +28,17 @@ public:
 	//Accessor
 	sf::Vector2f direction;
 	const sf::Vector2f& getPos() const;
+	const sf::FloatRect getBounds() const;
 	const sf::Vector2f& getSize() const;
+	float getDamage();
 
 	//Functions
 	void move(sf::Vector2f vector);
 
 	void setPosition(float x, float y);
 	bool canAttack();
+	void getHit(float damage);
+	float getHealth();
 	void updateCooldowns();
 	void update();
 	void render(sf::RenderTarget& target);

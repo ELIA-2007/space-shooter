@@ -21,7 +21,7 @@ void Asteroid::initVariables() {
 	this->targetY = 1200;
 
 	//Rotation speed;
-	std::uniform_int_distribution<> rotationRange(1, 3);
+	std::uniform_real_distribution<> rotationRange(1.5f, 3.5f);
 	this->rotationSpeed = rotationRange(gen);
 
 	//Rotation angle
@@ -36,7 +36,10 @@ void Asteroid::initVariables() {
 	this->moveSpeed = mapValue(5.f, 18.f, 2.f, 0.2f, this->size);
 
 	//Health
-	this->health = mapValue(5.f, 18.f, 1.f, 4.f, this->size);
+	this->health = mapValue(5.f, 18.f, 1.f, 15.f, this->size);
+
+	//Damage
+	this->damage = mapValue(5.f, 18.f, 1.f, 5.f, this->size);
 }
 
 

@@ -20,7 +20,7 @@ private:
 	std::vector<Bullet*> bullets;
 	std::vector<Enemy*> enemies;
 
-	unsigned int spawnRate = 1000;
+	unsigned int spawnRate = 500;
 	unsigned int spawning = spawnRate;
 
 	//Player

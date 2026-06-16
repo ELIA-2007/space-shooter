@@ -2,7 +2,9 @@
 #include "functions.h"
 
 void Player::initVariables() {
-	this->moveSpeed = 3;
+	this->health = 10.f;
+	this->moveSpeed = 3.f;
+	this->damage = 1.f;
 	this->shootingCooldownMax = 40;
 	this->shootingCooldown = this->shootingCooldownMax;
 
@@ -29,8 +31,16 @@ const sf::Vector2f& Player::getPos() const {
 	return this->sprite.getPosition();
 }
 
+const sf::FloatRect Player::getBounds() const {
+	return this->sprite.getGlobalBounds();
+}
+
 const sf::Vector2f& Player::getSize() const {
 	return this->sprite.getGlobalBounds().getSize();
+}
+
+float Player::getDamage() {
+	return this->damage;
 }
 
 void Player::move(sf::Vector2f vector) {
@@ -50,6 +60,14 @@ bool Player::canAttack() {
 	else {
 		return false;
 	}
+}
+
+void Player::getHit(float damage) {
+	this->health -= static_cast<int>(damage);
+}
+
+float Player::getHealth() {
+	return this->health;
 }
 
 void Player::updateCooldowns() {

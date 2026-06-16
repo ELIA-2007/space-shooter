@@ -4,6 +4,10 @@ float Enemy::getHealth() {
     return this->health;
 }
 
+float Enemy::getDamage() {
+    return this->damage;
+}
+
 void Enemy::getHit(float damage) {
     this->health -= damage;
 }
