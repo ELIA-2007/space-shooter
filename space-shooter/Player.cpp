@@ -1,7 +1,8 @@
 #include "Player.h"
+#include "functions.h"
 
 void Player::initVariables() {
-	this->moveSpeed = 2;
+	this->moveSpeed = 3;
 	this->shootingCooldownMax = 40;
 	this->shootingCooldown = this->shootingCooldownMax;
 
@@ -32,8 +33,9 @@ const sf::Vector2f& Player::getSize() const {
 	return this->sprite.getGlobalBounds().getSize();
 }
 
-void Player::move(const float dirX, const float dirY) {
-	this->sprite.move(this->moveSpeed * dirX, this->moveSpeed * dirY);
+void Player::move(sf::Vector2f vector) {
+	vectorScalarProduct(&vector, this->moveSpeed);
+	this->sprite.move(vector);
 }
 
 void Player::setPosition(float x, float y) {

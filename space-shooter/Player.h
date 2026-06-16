@@ -24,11 +24,12 @@ public:
 	virtual ~Player();
 
 	//Accessor
+	sf::Vector2f direction;
 	const sf::Vector2f& getPos() const;
 	const sf::Vector2f& getSize() const;
 
 	//Functions
-	void move(const float dirX, const float dirY);
+	void move(sf::Vector2f vector);
 
 	void setPosition(float x, float y);
 	bool canAttack();

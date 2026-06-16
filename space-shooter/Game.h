@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Asteroid.h"
+#include "functions.h"
 
 class Game {
 private:
@@ -15,8 +16,10 @@ private:
 
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
+
 	std::vector<Bullet*> bullets;
 	std::vector<Enemy*> enemies;
+
 	unsigned int spawnRate = 1000;
 	unsigned int spawning = spawnRate;
 

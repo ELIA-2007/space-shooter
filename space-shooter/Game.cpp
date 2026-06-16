@@ -82,18 +82,26 @@ void Game::updatePollEvents() {
 
 void Game::updateInput() {
 	//Move player
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getPos().x > 0)
-		this->player->move(-1.f, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (this->player->getPos().x + this->player->getSize().x) < this->window->getSize().x)
-		this->player->move(+1.f, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && this->player->getPos().y > 0)
-		this->player->move(0.f, -1.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && (this->player->getPos().y + this->player->getSize().y) < this->window->getSize().y)
-		this->player->move(0.f, +1.f);
+	this->player->direction.x = 0; this->player->direction.y = 0;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getPos().x > 0) {
+		this->player->direction.x += -1;
+	}
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) and this->player->canAttack()) {
-	//	this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + (this->player->getSize().x / 2), this->player->getPos().y, 0.f, -1.f, 3.f));
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (this->player->getPos().x + this->player->getSize().x) < this->window->getSize().x) {
+		this->player->direction.x += +1;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && this->player->getPos().y > 0) {
+		this->player->direction.y += -1;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && (this->player->getPos().y + this->player->getSize().y) < this->window->getSize().y) {
+		this->player->direction.y += +1;
+	}
+
+	normalizeVector(&this->player->direction);
+	this->player->move(this->player->direction);
+
 	if (this->player->canAttack())
 		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->window->getSize(), this->player->getPos().x + (this->player->getSize().x / 2), this->player->getPos().y, 0.f, -1.f, 3.f));
 }
@@ -120,7 +128,7 @@ void Game::updateAsteroids() {
 			this->enemies.erase(this->enemies.begin() + i);
 		}
 	}
-	std::cout << this->enemies.size() << "\n";
+	//std::cout << this->enemies.size() << "\n";
 }
 
 void Game::spawnEnemies() {
