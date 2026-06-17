@@ -33,7 +33,7 @@ void Asteroid::initVariables() {
 	this->size = sizeRange(gen);
 
 	//MoveSpeed
-	this->moveSpeed = mapValue(5.f, 18.f, 2.f, 0.2f, this->size);
+	this->moveSpeed = mapValue(5.f, 18.f, 230.f, 30.f, this->size);
 
 	//Health
 	this->health = mapValue(5.f, 18.f, 1.f, 15.f, this->size);
@@ -72,7 +72,7 @@ Asteroid::~Asteroid() {
 
 }
 
-void Asteroid::update() {
+void Asteroid::update(float dt) {
 	this->sprite.rotate(this->rotationAngle * rotationSpeed);
-	this->sprite.move(this->velocity.x, this->velocity.y);
+	this->sprite.move(this->velocity.x * dt, this->velocity.y * dt);
 }

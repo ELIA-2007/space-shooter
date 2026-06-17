@@ -25,9 +25,9 @@ void Bullet::initSprite(sf::Texture* texture, sf::Vector2u windowSize) {
 	this->sprite.setOrigin(limits.width / 2.0f, limits.height / 2.0f); //Origine al centro
 }
 
-void Bullet::update() {
+void Bullet::update(float dt) {
 	//Move
-	this->sprite.move(this->moveSpeed * this->direction);
+	this->sprite.move(this->moveSpeed * this->direction * dt);
 }
 
 void Bullet::render(sf::RenderTarget* target) {

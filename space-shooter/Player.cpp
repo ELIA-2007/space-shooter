@@ -3,9 +3,9 @@
 
 void Player::initVariables() {
 	this->health = 10.f;
-	this->moveSpeed = 3.f;
+	this->moveSpeed = 300.f;
 	this->damage = 1.f;
-	this->shootingCooldownMax = 40;
+	this->shootingCooldownMax = 0.2f;
 	this->shootingCooldown = this->shootingCooldownMax;
 
 }
@@ -43,8 +43,8 @@ float Player::getDamage() {
 	return this->damage;
 }
 
-void Player::move(sf::Vector2f vector) {
-	vectorScalarProduct(&vector, this->moveSpeed);
+void Player::move(sf::Vector2f vector, float dt) {
+	vectorScalarProduct(&vector, this->moveSpeed * dt);
 	this->sprite.move(vector);
 }
 
@@ -53,8 +53,8 @@ void Player::setPosition(float x, float y) {
 }
 
 bool Player::canAttack() {
-	if (this->shootingCooldown == this->shootingCooldownMax) {
-		this->shootingCooldown = 0;
+	if (this->shootingCooldown >= this->shootingCooldownMax) {
+		this->shootingCooldown -= this->shootingCooldownMax;
 		return true;
 	}
 	else {
@@ -70,14 +70,14 @@ float Player::getHealth() {
 	return this->health;
 }
 
-void Player::updateCooldowns() {
+void Player::updateCooldowns(float dt) {
 	if (this->shootingCooldown < this->shootingCooldownMax) {
-		this->shootingCooldown += 1;
+		this->shootingCooldown += dt;
 	}
 }
 
-void Player::update() {
-	this->updateCooldowns();
+void Player::update(float dt) {
+	this->updateCooldowns(dt);
 }
 
 void Player::render(sf::RenderTarget& target) {

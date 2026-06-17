@@ -14,8 +14,8 @@ private:
 	float health;
 	float moveSpeed;
 	float damage;
-	int unsigned shootingCooldown;
-	int unsigned shootingCooldownMax;
+	float shootingCooldown;
+	float shootingCooldownMax;
 
 	//Private functions
 	void initVariables();
@@ -33,14 +33,14 @@ public:
 	float getDamage();
 
 	//Functions
-	void move(sf::Vector2f vector);
+	void move(sf::Vector2f vector, float dt);
 
 	void setPosition(float x, float y);
 	bool canAttack();
 	void getHit(float damage);
 	float getHealth();
-	void updateCooldowns();
-	void update();
+	void updateCooldowns(float dt);
+	void update(float dt);
 	void render(sf::RenderTarget& target);
 };
 

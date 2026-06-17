@@ -6,9 +6,12 @@ void Game::initWindow() {
 	unsigned int height = desktop.height * 0.9f;
 
 	this->window = new sf::RenderWindow(sf::VideoMode(width, height), "SpaceShooter", sf::Style::Close | sf::Style::Titlebar);
+	this->deltaClock;
 
 	this->window->setFramerateLimit(144);
 	this->window->setVerticalSyncEnabled(false);
+	
+	this->debug = false;
 
 	std::cout << width << "  " << height << "\n";
 }
@@ -37,6 +40,15 @@ void Game::initTextures() {
 
 }
 
+void Game::initFonts() {
+	if (this->fonts["MAIN"].loadFromFile("fonts/JetBrainsMonoNL-Regular.ttf")) {
+		std::cout << "ERROR::GAME::INITFONT:: Could not load font file." << "\n";
+	}
+	else {
+		std::cout << "Font caricato con successo!" << "\n";
+	}
+}
+
 void Game::initPlayer() {
 	this->player = new Player(this->textures["PLAYER"], this->window->getSize());
 	this->player->setPosition(static_cast<float>(window->getSize().x) / 2, static_cast<float>(window->getSize().y) - this->player->getSize().y);
@@ -46,6 +58,7 @@ void Game::initPlayer() {
 Game::Game() {
 	this->initWindow();
 	this->initTextures();
+	this->initFonts();
 	this->initPlayer();
 }
 
@@ -65,6 +78,8 @@ Game::~Game() {
 //Functions
 void Game::run() {
 	while (this->window->isOpen()) {
+		this->dtTime = deltaClock.restart();
+		this->dt = dtTime.asSeconds();
 		this->update();
 		this->render();
 	}
@@ -100,15 +115,22 @@ void Game::updateInput() {
 	}
 
 	normalizeVector(&this->player->direction);
-	this->player->move(this->player->direction);
+	this->player->move(this->player->direction, this->dt);
 
 	if (this->player->canAttack())
-		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->window->getSize(), this->player->getPos().x + (this->player->getSize().x / 2), this->player->getPos().y, 0.f, -1.f, 3.f));
+		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->window->getSize(), this->player->getPos().x + (this->player->getSize().x / 2), this->player->getPos().y, 0.f, -1.f, 500.f));
+	
+	if (this->f1KeyCooldown > 0)
+		--this->f1KeyCooldown;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1) && this->f1KeyCooldown == 0) {
+		this->f1KeyCooldown = 80;
+		this->debug = !this->debug;
+	}
 }
 
 void Game::updateBullets() {
 	for (int i = static_cast<int>(this->bullets.size()) - 1; i >= 0; --i) {
-		this->bullets[i]->update();
+		this->bullets[i]->update(this->dt);
 
 		// Bullet culling (top of screen)
 		if (this->bullets[i]->getBounds().top + this->bullets[i]->getBounds().height < 0.f) {
@@ -131,7 +153,7 @@ void Game::updateBullets() {
 
 void Game::updateAsteroids() {
 	for (int i = static_cast<int>(this->enemies.size()) - 1; i >= 0; --i) {
-		this->enemies[i]->update();
+		this->enemies[i]->update(this->dt);
 
 		// Asteroid culling (bottom of screen or destroyed)
 		if (this->enemies[i]->getBounds().top + this->enemies[i]->getBounds().height > this->window->getSize().y or this->enemies[i]->getHealth() <= 0) {
@@ -143,18 +165,17 @@ void Game::updateAsteroids() {
 }
 
 void Game::spawnEnemies() {
+	this->spawning += dt;
 	if (this->spawning >= this->spawnRate) {
 		this->enemies.push_back(new Asteroid(this->textures["ASTEROID"], this->window->getSize()));
-		this->spawning = 0;
+		this->spawning -= this->spawnRate;
 	}
-	else
-		++this->spawning;
 }
 
 void Game::update() {
 	this->updatePollEvents();
 	this->updateInput();
-	this->player->update();
+	this->player->update(this->dt);
 
 	for (int i = static_cast<int>(this->enemies.size()) - 1; i >= 0; --i) {
 		if (this->player->getBounds().intersects(this->enemies[i]->getBounds())) {
@@ -166,8 +187,6 @@ void Game::update() {
 	if (this->player->getHealth() <= 0) {
 		this->window->close();
 	}
-
-	std::cout << "Health: " << this->player->getHealth() << "\n";
 
 	this->updateBullets();
 	this->updateAsteroids();
@@ -186,6 +205,23 @@ void Game::render() {
 
 	for (auto* enemy : this->enemies)
 		enemy->render(*this->window);
+
+	if (this->debug) {
+		sf::FloatRect bounds = this->player->getBounds();
+		drawHitbox(bounds, sf::Color::Green, *this->window);
+
+		for (auto* enemy : this->enemies) {
+			sf::FloatRect bounds = enemy->getBounds();
+			drawHitbox(bounds, sf::Color::Red, *this->window);
+		}
+
+		for (auto* bullet : this->bullets) {
+			sf::FloatRect bounds = bullet->getBounds();
+			drawHitbox(bounds, sf::Color::Blue, *this->window);
+		}
+	}
+
+	text(this->fonts["MAIN"], "DIOCANE", 40, sf::Color::White, 100, 100, *this->window);
 
 	this->window->display();
 }

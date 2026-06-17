@@ -21,7 +21,7 @@ public:
 	virtual void getHit(float damage);
 	virtual const sf::FloatRect getBounds() const;
 
-	virtual void update();
+	virtual void update(float dt);
 	virtual void render(sf::RenderTarget& target);
 };
 

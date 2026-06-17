@@ -11,17 +11,27 @@ class Game {
 private:
 	//Window
 	sf::RenderWindow* window;
+	
+	sf::Clock deltaClock;
+	sf::Time dtTime;
+	float dt;
+
 	sf::Texture backgroundTexture;
 	sf::Sprite backgroundSprite;
 
+	//Debug
+	bool debug;
+	unsigned short f1KeyCooldown;
+
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
+	std::map<std::string, sf::Font> fonts;
 
 	std::vector<Bullet*> bullets;
 	std::vector<Enemy*> enemies;
 
-	unsigned int spawnRate = 500;
-	unsigned int spawning = spawnRate;
+	float spawnRate = 3;
+	float spawning = spawnRate;
 
 	//Player
 	Player* player;
@@ -30,6 +40,7 @@ private:
 	//Private functions
 	void initWindow();
 	void initTextures();
+	void initFonts();
 
 	void initPlayer();
 

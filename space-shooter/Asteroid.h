@@ -26,7 +26,7 @@ public:
 	Asteroid(sf::Texture* texture, sf::Vector2u windowSize);
 	virtual ~Asteroid();
 
-	void update();
+	void update(float dt);
 	
 };
 

@@ -20,7 +20,7 @@ public:
 	const sf::FloatRect getBounds() const;
 
 	void initSprite(sf::Texture* texture, sf::Vector2u windowSize);
-	void update();
+	void update(float dt);
 	void render(sf::RenderTarget* target);
 };
 

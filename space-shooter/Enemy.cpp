@@ -16,7 +16,7 @@ const sf::FloatRect Enemy::getBounds() const {
     return this->sprite.getGlobalBounds();
 }
 
-void Enemy::update() {
+void Enemy::update(float dt) {
 }
 
 void Enemy::render(sf::RenderTarget& target) {
